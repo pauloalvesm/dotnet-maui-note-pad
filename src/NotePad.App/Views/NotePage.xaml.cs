@@ -1,8 +1,18 @@
+using NotePad.App.Models;
+
 namespace NotePad.App.Views;
 
 public partial class NotePage : ContentPage
 {
     string fileName = Path.Combine(FileSystem.AppDataDirectory, "notes.txt");
+
+    public string ItemId
+    {
+        set
+        {
+            LoadNote(value);
+        }
+    }
 
     public NotePage()
 	{
@@ -26,5 +36,19 @@ public partial class NotePage : ContentPage
         }
 
         TextEditor.Text = string.Empty;
+    }
+
+    public void LoadNote(string fileName)
+    {
+        var note = new Note();
+        note.Filename = fileName;
+
+        if (File.Exists(fileName))
+        {
+            note.Date = File.GetCreationTime(fileName);
+            note.Text = File.ReadAllText(fileName);
+        }
+
+        BindingContext = note;
     }
 }
