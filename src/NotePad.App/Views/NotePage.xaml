@@ -3,10 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NotePad.App.Views.NotePage"
              Title="NotePage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to NotePad!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+    <VerticalStackLayout Spacing="10" Margin="10">
+        <Editor x:Name="TextEditor"
+                Placeholder="Write your note"
+                HeightRequest="100" 
+                Text="{Binding Text}"/>
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+            <Button 
+                x:Name="btnSave"
+                Text="Save"
+                Clicked="btnSave_Clicked"/>
+            <Button
+                Grid.Column="1"
+                x:Name="btnDelete"
+                Text="Delete"
+                Clicked="btnDelete_Clicked"/>
+        </Grid>
     </VerticalStackLayout>
 </ContentPage>
