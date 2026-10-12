@@ -7,8 +7,8 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" 
                      IconImageSource="{FontImage Glyph='+', Color=White, Size=22}" 
-                     x:Name="ItemAdd"
-                     Clicked="ItemAdd_Clicked"/>
+                     x:Name="AddItem"
+                     Clicked="AddItem_Clicked"/>
     </ContentPage.ToolbarItems>
 
     <CollectionView 
