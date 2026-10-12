@@ -15,17 +15,30 @@ public partial class NotePage : ContentPage
     }
 
     public NotePage()
-	{
-		InitializeComponent();
-        if (File.Exists(fileName)) 
-        {
-            TextEditor.Text = File.ReadAllText(fileName);
-        }
-	}
-
-    private void btnSave_Clicked(object sender, EventArgs e)
     {
-        File.WriteAllText(fileName, TextEditor.Text);
+        InitializeComponent();
+
+        var randomFileName = $"{Path.GetRandomFileName()}.notes.txt";
+        var fullPath = Path.Combine(FileSystem.AppDataDirectory, randomFileName);
+
+        BindingContext = new Note
+        {
+            Filename = fullPath,
+            Date = DateTime.Now
+        };
+    }
+
+    private async void btnSave_Clicked(object sender, EventArgs e)
+    {
+        if (BindingContext is Note note)
+        {
+            note.Text = TextEditor.Text;
+            note.Date = DateTime.Now;
+
+            File.WriteAllText(note.Filename, note.Text);
+        }
+
+        await Shell.Current.GoToAsync("..");
     }
 
     private void btnDelete_Clicked(object sender, EventArgs e)
@@ -40,8 +53,10 @@ public partial class NotePage : ContentPage
 
     public void LoadNote(string fileName)
     {
-        var note = new Note();
-        note.Filename = fileName;
+        var note = new Note
+        {
+            Filename = fileName
+        };
 
         if (File.Exists(fileName))
         {
