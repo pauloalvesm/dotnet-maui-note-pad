@@ -2,10 +2,9 @@ using NotePad.App.Models;
 
 namespace NotePad.App.Views;
 
+[QueryProperty(nameof(ItemId), nameof(ItemId))]
 public partial class NotePage : ContentPage
 {
-    string fileName = Path.Combine(FileSystem.AppDataDirectory, "notes.txt");
-
     public string ItemId
     {
         set
@@ -41,14 +40,17 @@ public partial class NotePage : ContentPage
         await Shell.Current.GoToAsync("..");
     }
 
-    private void btnDelete_Clicked(object sender, EventArgs e)
+    private async void btnDelete_Clicked(object sender, EventArgs e)
     {
-        if (File.Exists(fileName))
+        if (BindingContext is Note note)
         {
-            File.Delete(fileName);
+            if (File.Exists(note.Filename))
+            {
+                File.Delete(note.Filename);
+            }
         }
 
-        TextEditor.Text = string.Empty;
+        await Shell.Current.GoToAsync("..");
     }
 
     public void LoadNote(string fileName)
