@@ -2,10 +2,9 @@ using NotePad.App.Models;
 
 namespace NotePad.App.Views;
 
+[QueryProperty(nameof(ItemId), nameof(ItemId))]
 public partial class NotePage : ContentPage
 {
-    string fileName = Path.Combine(FileSystem.AppDataDirectory, "notes.txt");
-
     public string ItemId
     {
         set
@@ -15,33 +14,51 @@ public partial class NotePage : ContentPage
     }
 
     public NotePage()
-	{
-		InitializeComponent();
-        if (File.Exists(fileName)) 
-        {
-            TextEditor.Text = File.ReadAllText(fileName);
-        }
-	}
-
-    private void btnSave_Clicked(object sender, EventArgs e)
     {
-        File.WriteAllText(fileName, TextEditor.Text);
+        InitializeComponent();
+
+        var randomFileName = $"{Path.GetRandomFileName()}.notes.txt";
+        var fullPath = Path.Combine(FileSystem.AppDataDirectory, randomFileName);
+
+        BindingContext = new Note
+        {
+            Filename = fullPath,
+            Date = DateTime.Now
+        };
     }
 
-    private void btnDelete_Clicked(object sender, EventArgs e)
+    private async void btnSave_Clicked(object sender, EventArgs e)
     {
-        if (File.Exists(fileName))
+        if (BindingContext is Note note)
         {
-            File.Delete(fileName);
+            note.Text = TextEditor.Text;
+            note.Date = DateTime.Now;
+
+            File.WriteAllText(note.Filename, note.Text);
         }
 
-        TextEditor.Text = string.Empty;
+        await Shell.Current.GoToAsync("..");
+    }
+
+    private async void btnDelete_Clicked(object sender, EventArgs e)
+    {
+        if (BindingContext is Note note)
+        {
+            if (File.Exists(note.Filename))
+            {
+                File.Delete(note.Filename);
+            }
+        }
+
+        await Shell.Current.GoToAsync("..");
     }
 
     public void LoadNote(string fileName)
     {
-        var note = new Note();
-        note.Filename = fileName;
+        var note = new Note
+        {
+            Filename = fileName
+        };
 
         if (File.Exists(fileName))
         {
