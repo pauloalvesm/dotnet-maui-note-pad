@@ -11,7 +11,7 @@ public class About
     {
         Title = "NotePad";
         Version = AppInfo.VersionString;
-        Description = "This app aims to simulate a notepad where you " +
+        Description = "Developed by Paulo Alves - This app aims to simulate a notepad where you " +
                       "can write down anything you want.";
         MoreInfoUrl = "https://github.com/pauloalvesm";
     }
