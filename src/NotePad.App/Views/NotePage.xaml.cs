@@ -29,6 +29,11 @@ public partial class NotePage : ContentPage
 
     private async void btnSave_Clicked(object sender, EventArgs e)
     {
+        if (!await ValidateAndAlertAsync())
+        {
+            return;
+        }
+
         if (BindingContext is Note note)
         {
             note.Text = TextEditor.Text;
@@ -51,6 +56,17 @@ public partial class NotePage : ContentPage
         }
 
         await Shell.Current.GoToAsync("..");
+    }
+
+    private async Task<bool> ValidateAndAlertAsync()
+    {
+        if (string.IsNullOrWhiteSpace(TextEditor.Text))
+        {
+            await DisplayAlertAsync("Warning", "The note cannot be empty.", "OK");
+            return false;
+        }
+
+        return true;
     }
 
     public void LoadNote(string fileName)
