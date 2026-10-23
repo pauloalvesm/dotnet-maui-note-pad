@@ -1,21 +1,22 @@
 using NotePad.App.Models;
+using NotePad.App.Services;
 
 namespace NotePad.App.Views;
 
 [QueryProperty(nameof(ItemId), nameof(ItemId))]
 public partial class NotePage : ContentPage
 {
+    private readonly NoteService _noteService;
+
     public string ItemId
     {
-        set
-        {
-            LoadNote(value);
-        }
+        set => LoadNote(value);
     }
 
-    public NotePage()
+    public NotePage(NoteService noteService)
     {
         InitializeComponent();
+        _noteService = noteService;
 
         var randomFileName = $"{Path.GetRandomFileName()}.notes.txt";
         var fullPath = Path.Combine(FileSystem.AppDataDirectory, randomFileName);
@@ -39,7 +40,7 @@ public partial class NotePage : ContentPage
             note.Text = TextEditor.Text;
             note.Date = DateTime.Now;
 
-            File.WriteAllText(note.Filename, note.Text);
+            _noteService.SaveNote(note);
         }
 
         await Shell.Current.GoToAsync("..");
@@ -49,10 +50,7 @@ public partial class NotePage : ContentPage
     {
         if (BindingContext is Note note)
         {
-            if (File.Exists(note.Filename))
-            {
-                File.Delete(note.Filename);
-            }
+            _noteService.DeleteNote(note.Filename);
         }
 
         await Shell.Current.GoToAsync("..");
@@ -71,17 +69,6 @@ public partial class NotePage : ContentPage
 
     public void LoadNote(string fileName)
     {
-        var note = new Note
-        {
-            Filename = fileName
-        };
-
-        if (File.Exists(fileName))
-        {
-            note.Date = File.GetCreationTime(fileName);
-            note.Text = File.ReadAllText(fileName);
-        }
-
-        BindingContext = note;
+        BindingContext = _noteService.LoadNote(fileName);
     }
 }
