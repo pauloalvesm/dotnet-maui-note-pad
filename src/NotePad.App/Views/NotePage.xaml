@@ -8,16 +8,33 @@
                 Placeholder="Write your note"
                 HeightRequest="100" 
                 Text="{Binding Text}"/>
-        <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+
+        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
             <Button 
                 x:Name="btnSave"
                 Text="Save"
-                Clicked="btnSave_Clicked"/>
+                Clicked="btnSave_Clicked"
+                BackgroundColor="#32CD32"
+                TextColor="#FFFFFF"
+                CornerRadius="10"
+                FontAttributes="Bold">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="✓" Color="#FFFFFF" Size="18" />
+                </Button.ImageSource>
+            </Button>
             <Button
                 Grid.Column="1"
                 x:Name="btnDelete"
                 Text="Delete"
-                Clicked="btnDelete_Clicked"/>
+                Clicked="btnDelete_Clicked"
+                BackgroundColor="#FF0000"
+                TextColor="#FFFFFF"
+                CornerRadius="10"
+                FontAttributes="Bold">
+                <Button.ImageSource>
+                    <FontImageSource Glyph="✕" Color="#FFFFFF" Size="18" />
+                </Button.ImageSource>
+            </Button>
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

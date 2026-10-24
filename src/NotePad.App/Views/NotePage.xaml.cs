@@ -1,21 +1,22 @@
 using NotePad.App.Models;
+using NotePad.App.Services;
 
 namespace NotePad.App.Views;
 
 [QueryProperty(nameof(ItemId), nameof(ItemId))]
 public partial class NotePage : ContentPage
 {
+    private readonly NoteService _noteService;
+
     public string ItemId
     {
-        set
-        {
-            LoadNote(value);
-        }
+        set => LoadNote(value);
     }
 
-    public NotePage()
+    public NotePage(NoteService noteService)
     {
         InitializeComponent();
+        _noteService = noteService;
 
         var randomFileName = $"{Path.GetRandomFileName()}.notes.txt";
         var fullPath = Path.Combine(FileSystem.AppDataDirectory, randomFileName);
@@ -29,12 +30,17 @@ public partial class NotePage : ContentPage
 
     private async void btnSave_Clicked(object sender, EventArgs e)
     {
+        if (!await ValidateAndAlertAsync())
+        {
+            return;
+        }
+
         if (BindingContext is Note note)
         {
             note.Text = TextEditor.Text;
             note.Date = DateTime.Now;
 
-            File.WriteAllText(note.Filename, note.Text);
+            _noteService.SaveNote(note);
         }
 
         await Shell.Current.GoToAsync("..");
@@ -44,28 +50,25 @@ public partial class NotePage : ContentPage
     {
         if (BindingContext is Note note)
         {
-            if (File.Exists(note.Filename))
-            {
-                File.Delete(note.Filename);
-            }
+            _noteService.DeleteNote(note.Filename);
         }
 
         await Shell.Current.GoToAsync("..");
     }
 
-    public void LoadNote(string fileName)
+    private async Task<bool> ValidateAndAlertAsync()
     {
-        var note = new Note
+        if (string.IsNullOrWhiteSpace(TextEditor.Text))
         {
-            Filename = fileName
-        };
-
-        if (File.Exists(fileName))
-        {
-            note.Date = File.GetCreationTime(fileName);
-            note.Text = File.ReadAllText(fileName);
+            await DisplayAlertAsync("Warning", "The note cannot be empty.", "OK");
+            return false;
         }
 
-        BindingContext = note;
+        return true;
+    }
+
+    public void LoadNote(string fileName)
+    {
+        BindingContext = _noteService.LoadNote(fileName);
     }
 }
