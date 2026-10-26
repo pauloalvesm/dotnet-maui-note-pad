@@ -12,7 +12,6 @@ public class NoteServiceTests : IDisposable
     {
         _testDirectory = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         Directory.CreateDirectory(_testDirectory);
-
         _noteService = new NoteService(_testDirectory);
     }
 
@@ -50,6 +49,42 @@ public class NoteServiceTests : IDisposable
 
         // Assert
         Assert.False(File.Exists(filePath));
+    }
+
+    [Fact]
+    public void LoadNote_WithNonExistentFile_ShouldReturnEmptyNoteWithoutThrowing()
+    {
+        // Arrange
+        var nonExistentPath = Path.Combine(_testDirectory, "non_existent.notes.txt");
+
+        // Act
+        var note = _noteService.LoadNote(nonExistentPath);
+
+        // Assert
+        Assert.NotNull(note);
+        Assert.Equal(nonExistentPath, note.Filename);
+        Assert.Null(note.Text);
+    }
+
+    [Fact]
+    public void DeleteNote_WithNonExistentFile_ShouldNotThrowException()
+    {
+        // Arrange
+        var nonExistentPath = Path.Combine(_testDirectory, "ghost.notes.txt");
+
+        // Act & Assert
+        var exception = Record.Exception(() => _noteService.DeleteNote(nonExistentPath));
+        Assert.Null(exception);
+    }
+
+    [Fact]
+    public void LoadAllNotes_WhenDirectoryIsEmpty_ShouldReturnEmptyList()
+    {
+        // Act
+        var notes = _noteService.LoadAllNotes();
+
+        // Assert
+        Assert.Empty(notes);
     }
 
     public void Dispose()
