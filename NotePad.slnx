@@ -4,4 +4,7 @@
       <Deploy Solution="Debug|*" />
     </Project>
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/NotePad.Tests/NotePad.Tests.csproj" Id="27c6b224-ff6a-4988-a35c-f33b33f05fa6" />
+  </Folder>
 </Solution>
