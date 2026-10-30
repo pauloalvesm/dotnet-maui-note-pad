@@ -1,6 +1,10 @@
 <h1 align="center">📱 NotePad</h1>
 
 <p align="center">
+  <a href="README.md"><b>English</b></a> | <a href="README.pt-br.md"><b>Português (Brasil)</b></a>
+</p>
+
+<p align="center">
   <a href="https://learn.microsoft.com/pt-br/dotnet/"><img alt="DotNet 8" src="https://img.shields.io/badge/.NET-5C2D91?logo=.net&logoColor=white&style=for-the-badge" /></a>
   <a href="https://learn.microsoft.com/pt-br/dotnet/csharp/programming-guide/"><img alt="C#" src="https://img.shields.io/badge/C%23-239120?logo=c-sharp&logoColor=white&style=for-the-badge" /></a>
 </p>
@@ -17,6 +21,7 @@ This project was developed using the following technologies:
   - `.NET 10`
   - `.NET MAUI`
   - `C#`
+  - `XUnit`
  
 ## 💾 How to Run Locally
 
