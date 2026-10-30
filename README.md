@@ -28,7 +28,22 @@ This project was developed using the following technologies:
 ```bash
 # Clone the repository
 git clone https://github.com/pauloalvesm/dotnet-maui-note-pad.git
+
+# Navigate to the project folder
+cd src/NotePad.App
+
+# Restore the dependencies
+dotnet restore
+
+# Run the project
+dotnet run
 ```
+
+## 📷 Screenshots
+
+<p align="center"> <img src="https://github.com/pauloalvesm/dotnet-maui-note-pad/blob/master/src/NotePad.App/Resources/Images/screenshot-1.jpeg" style="width:400px;" /> </p>
+<p align="center"> <img src="https://github.com/pauloalvesm/dotnet-maui-note-pad/blob/master/src/NotePad.App/Resources/Images/screenshot-2.jpeg" style="width:400px;" /> </p>
+<p align="center"> <img src="https://github.com/pauloalvesm/dotnet-maui-note-pad/blob/master/src/NotePad.App/Resources/Images/screenshot-3.jpeg" style="width:400px;" /> </p>
 
 ## 👤 Author
 
